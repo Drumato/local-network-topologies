@@ -1,0 +1,55 @@
+{
+ "vrfId": 0,
+ "vrfName": "default",
+ "tableVersion": 2,
+ "routerId": "10.0.1.103",
+ "defaultLocPrf": 100,
+ "localAS": 100,
+ "routes": { "10.0.2.0/24": [
+  {
+    "valid":true,
+    "bestpath":true,
+    "selectionReason":"Neighbor IP",
+    "pathFrom":"internal",
+    "prefix":"10.0.2.0",
+    "prefixLen":24,
+    "network":"10.0.2.0\/24",
+    "version":2,
+    "metric":0,
+    "locPrf":100,
+    "weight":0,
+    "peerId":"10.0.1.91",
+    "path":"",
+    "origin":"IGP",
+    "nexthops":[
+      {
+        "ip":"10.0.1.100",
+        "hostname":"RR0",
+        "afi":"ipv4",
+        "used":true
+      }
+    ]
+  },
+  {
+    "valid":true,
+    "pathFrom":"internal",
+    "prefix":"10.0.2.0",
+    "prefixLen":24,
+    "network":"10.0.2.0\/24",
+    "version":2,
+    "metric":0,
+    "locPrf":100,
+    "weight":0,
+    "peerId":"10.0.1.92",
+    "path":"",
+    "origin":"IGP",
+    "nexthops":[
+      {
+        "ip":"10.0.1.100",
+        "hostname":"RR1",
+        "afi":"ipv4",
+        "used":true
+      }
+    ]
+  }
+] }  } 
