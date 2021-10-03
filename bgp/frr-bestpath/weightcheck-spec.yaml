@@ -1,0 +1,84 @@
+nodes:
+  - name: R1
+    image: drumato/frr-debian:latest
+    interfaces:
+      - { name: net2, type: bridge, args: B0 }
+  - name: C1
+    image: drumato/frr-debian:latest
+    interfaces:
+      - { name: net11, type: direct, args: G1#net1 }
+      - { name: net12, type: direct, args: G2#net1 }
+  - name: G1
+    image: drumato/frr-debian:latest
+    interfaces:
+      - { name: net1, type: direct, args: C1#net11 }
+      - { name: net2, type: bridge, args: B0 }
+  - name: G2
+    image: drumato/frr-debian:latest
+    interfaces:
+      - { name: net1, type: direct, args: C1#net12 }
+      - { name: net2, type: bridge, args: B0 }
+switches:
+  - name: B0
+    interfaces:
+      - { name: net2, type: container, args: R1 }
+      - { name: net2, type: container, args: G1 }
+      - { name: net2, type: container, args: G2 }
+node_configs:
+  - name: R1
+    cmds:
+    - cmd: /usr/lib/frr/frr start
+    - cmd: >-
+            vtysh -c "conf t"
+            -c "int net2" -c "ip addr 10.0.0.42/16" -c "exit"
+            -c "router bgp 65042"
+            -c " bgp bestpath as-path multipath-relax"
+            -c " address-family ipv4 unicast"
+            -c "  neighbor 10.0.0.100 remote-as 65001"
+            -c "  neighbor 10.0.0.200 remote-as 65002"
+            -c " exit-address-family"
+            -c "exit"
+  - name: C1
+    cmds:
+    - cmd: /usr/lib/frr/frr start
+    - cmd: >-
+            vtysh -c "conf t"
+            -c "int net11" -c "ip addr 10.0.251.254/24" -c "exit"
+            -c "int net12" -c "ip addr 10.0.252.254/24" -c "exit"
+            -c "router bgp 65100"
+            -c " bgp bestpath as-path multipath-relax"
+            -c " address-family ipv4 unicast"
+            -c "  neighbor 10.0.251.1 remote-as 65001"
+            -c "  neighbor 10.0.252.1 remote-as 65002"
+            -c " exit-address-family"
+            -c "exit"
+  - name: G1
+    cmds:
+    - cmd: /usr/lib/frr/frr start
+    - cmd: >-
+            vtysh -c "conf t"
+            -c "int net1" -c "ip addr 10.0.251.1/24" -c "exit"
+            -c "int net2" -c "ip addr 10.0.0.100/16" -c "exit"
+            -c "router bgp 65001"
+            -c " bgp bestpath as-path multipath-relax"
+            -c " address-family ipv4 unicast"
+            -c "  neighbor 10.0.0.42 remote-as 65042"
+            -c "  neighbor 10.0.251.254 remote-as 65100"
+            -c "  network 10.0.251.254/32"
+            -c " exit-address-family"
+            -c "exit"
+  - name: G2
+    cmds:
+    - cmd: /usr/lib/frr/frr start
+    - cmd: >-
+            vtysh -c "conf t"
+            -c "int net1" -c "ip addr 10.0.252.1/24" -c "exit"
+            -c "int net2" -c "ip addr 10.0.0.200/16" -c "exit"
+            -c "router bgp 65002"
+            -c " bgp bestpath as-path multipath-relax"
+            -c " address-family ipv4 unicast"
+            -c "  neighbor 10.0.0.42 remote-as 65042"
+            -c "  neighbor 10.0.252.254 remote-as 65100"
+            -c "  network 10.0.252.254/32"
+            -c " exit-address-family"
+            -c "exit"
