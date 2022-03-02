@@ -1,0 +1,48 @@
+nodes:
+  - name: C1
+    image: gobgp:v3.0.0
+    docker_run_extra_args: --entrypoint bash
+    interfaces:
+      - { name: net1, type: direct, args: R1#net1 }
+  - name: R1
+    image: gobgp:v3.0.0
+    docker_run_extra_args: --entrypoint bash
+    interfaces:
+      - { name: net0, type: direct, args: R2#net0 }
+      - { name: net1, type: direct, args: C1#net1 }
+    sysctls:
+      - sysctl: net.ipv4.ip_forward=1
+  - name: R2
+    image: gobgp:v3.0.0
+    docker_run_extra_args: --entrypoint bash
+    interfaces:
+      - { name: net0, type: direct, args: R1#net0 }
+    sysctls:
+      - sysctl: net.ipv4.ip_forward=1
+
+node_configs:
+  - name: R1
+    cmds:
+      - cmd: sed -i -e 's/bgpd=no/bgpd=yes/g' /etc/frr/daemons
+      - cmd: /usr/lib/frr/frrinit.sh start
+      - cmd: >-
+          vtysh -c 'conf t'
+          -c 'interface net0'
+          -c ' ip address 192.168.101.11/24'
+          -c '!'
+          -c 'interface net1'
+          -c ' ip address 192.168.102.11/24'
+          -c '!'
+  - name: R2
+    cmds:
+      - cmd: sed -i -e 's/bgpd=no/bgpd=yes/g' /etc/frr/daemons
+      - cmd: /usr/lib/frr/frrinit.sh start
+      - cmd: >-
+          vtysh -c 'conf t'
+          -c 'interface net0'
+          -c ' ip address 192.168.101.12/24'
+          -c '!'
+  - name: C1
+    cmds:
+      - cmd: ip addr add 192.168.102.254/24 dev net1
+      - cmd: ip route replace default via 192.168.102.11 dev net1

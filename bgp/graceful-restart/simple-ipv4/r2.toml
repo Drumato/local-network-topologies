@@ -1,0 +1,17 @@
+[global.config]
+    as = 65002
+    router-id = "192.168.101.12"
+
+[[neighbors]]
+    [neighbors.config]
+        neighbor-address = "192.168.101.11"
+        peer-as = 65001
+    [neighbors.graceful-restart.config]
+        enabled = true
+
+[zebra]
+    [zebra.config]
+        enabled = true
+        url = "unix:/var/run/frr/zserv.api"
+        redistribute-route-type-list = ["connect"]
+        version = 6
