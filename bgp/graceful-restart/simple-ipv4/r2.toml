@@ -1,17 +1,27 @@
 [global.config]
     as = 65002
-    router-id = "192.168.101.12"
+    router-id = "10.255.12.22"
 
 [[neighbors]]
     [neighbors.config]
-        neighbor-address = "192.168.101.11"
+        neighbor-address = "10.255.12.11"
         peer-as = 65001
+
+[[neighbors]]
+    [neighbors.config]
+        neighbor-address = "10.255.23.33"
+        peer-as = 65003
     [neighbors.graceful-restart.config]
         enabled = true
+        restart-time = 120
+    [[neighbors.afi-safis]]
+        [neighbors.afi-safis.config]
+            afi-safi-name = "ipv4-unicast"
+        [neighbors.afi-safis.mp-graceful-restart.config]
+            enabled = true
 
 [zebra]
     [zebra.config]
         enabled = true
         url = "unix:/var/run/frr/zserv.api"
-        redistribute-route-type-list = ["connect"]
         version = 6

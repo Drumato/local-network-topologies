@@ -1,10 +1,10 @@
 [global.config]
-    as = 65001
-    router-id = "10.255.12.11"
+    as = 65003
+    router-id = "10.255.23.33"
 
 [[neighbors]]
     [neighbors.config]
-        neighbor-address = "10.255.12.22"
+        neighbor-address = "10.255.23.22"
         peer-as = 65002
     [neighbors.graceful-restart.config]
         enabled = true

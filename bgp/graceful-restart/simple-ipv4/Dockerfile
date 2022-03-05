@@ -5,5 +5,6 @@ COPY gobgp/gobgpd gobgpd
 
 COPY r1.toml r1.toml
 COPY r2.toml r2.toml
+COPY r3.toml r3.toml
 
-RUN apk add iperf tcpdump
+RUN apk add iperf tcpdump jq
