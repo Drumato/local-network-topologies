@@ -1,0 +1,98 @@
+nodes:
+- name: R1
+  image: drumato/frr-build:bgp-vpnv4-srv6-r1
+  docker_run_extra_args: --entrypoint bash
+  interfaces:
+  - { name: net12, type: direct, args: R2#net12 }
+  sysctls:
+  - sysctl: net.ipv6.conf.all.disable_ipv6=0
+  - sysctl: net.ipv6.conf.default.disable_ipv6=0
+  - sysctl: net.ipv4.ip_forward=1
+- name: CE11
+  image: drumato/frr-build:bgp-vpnv4-srv6-ce11
+  docker_run_extra_args: --entrypoint bash
+  interfaces:
+  - { name: net1, type: direct, args: R1#net1 }
+  sysctls:
+  - sysctl: net.ipv6.conf.all.disable_ipv6=0
+  - sysctl: net.ipv6.conf.default.disable_ipv6=0
+  - sysctl: net.ipv4.ip_forward=1
+- name: CE12
+  image: drumato/frr-build:bgp-vpnv4-srv6-ce12
+  docker_run_extra_args: --entrypoint bash
+  interfaces:
+  - { name: net2, type: direct, args: R1#net2 }
+  sysctls:
+  - sysctl: net.ipv6.conf.all.disable_ipv6=0
+  - sysctl: net.ipv6.conf.default.disable_ipv6=0
+  - sysctl: net.ipv4.ip_forward=1
+- name: CE13
+  image: drumato/frr-build:bgp-vpnv4-srv6-ce13
+  docker_run_extra_args: --entrypoint bash
+  interfaces:
+  - { name: net3, type: direct, args: R1#net3 }
+  sysctls:
+  - sysctl: net.ipv6.conf.all.disable_ipv6=0
+  - sysctl: net.ipv6.conf.default.disable_ipv6=0
+  - sysctl: net.ipv4.ip_forward=1
+- name: R2
+  image: drumato/frr-build:bgp-vpnv4-srv6-r2
+  docker_run_extra_args: --entrypoint bash
+  interfaces:
+  - { name: net12, type: direct, args: R1#net12 }
+  sysctls:
+  - sysctl: net.ipv6.conf.all.disable_ipv6=0
+  - sysctl: net.ipv6.conf.default.disable_ipv6=0
+  - sysctl: net.ipv4.ip_forward=1
+- name: CE21
+  image: drumato/frr-build:bgp-vpnv4-srv6-ce21
+  docker_run_extra_args: --entrypoint bash
+  interfaces:
+  - { name: net1, type: direct, args: R2#net1 }
+  sysctls:
+  - sysctl: net.ipv6.conf.all.disable_ipv6=0
+  - sysctl: net.ipv6.conf.default.disable_ipv6=0
+  - sysctl: net.ipv4.ip_forward=1
+- name: CE22
+  image: drumato/frr-build:bgp-vpnv4-srv6-ce22
+  docker_run_extra_args: --entrypoint bash
+  interfaces:
+  - { name: net2, type: direct, args: R2#net2 }
+  sysctls:
+  - sysctl: net.ipv6.conf.all.disable_ipv6=0
+  - sysctl: net.ipv6.conf.default.disable_ipv6=0
+  - sysctl: net.ipv4.ip_forward=1
+- name: CE23
+  image: drumato/frr-build:bgp-vpnv4-srv6-ce23
+  docker_run_extra_args: --entrypoint bash
+  interfaces:
+  - { name: net3, type: direct, args: R2#net3 }
+  sysctls:
+  - sysctl: net.ipv6.conf.all.disable_ipv6=0
+  - sysctl: net.ipv6.conf.default.disable_ipv6=0
+  - sysctl: net.ipv4.ip_forward=1
+node_configs:
+- name: R1
+  cmds:
+  - cmd: /usr/lib/frr/frrinit.sh start
+- name: R2
+  cmds:
+  - cmd: /usr/lib/frr/frrinit.sh start
+- name: CE11
+  cmds:
+  - cmd: /usr/lib/frr/frrinit.sh start
+- name: CE12
+  cmds:
+  - cmd: /usr/lib/frr/frrinit.sh start
+- name: CE13
+  cmds:
+  - cmd: /usr/lib/frr/frrinit.sh start
+- name: CE21
+  cmds:
+  - cmd: /usr/lib/frr/frrinit.sh start
+- name: CE22
+  cmds:
+  - cmd: /usr/lib/frr/frrinit.sh start
+- name: CE23
+  cmds:
+  - cmd: /usr/lib/frr/frrinit.sh start
