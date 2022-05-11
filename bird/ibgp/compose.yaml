@@ -1,0 +1,48 @@
+version: "3.9"
+
+services:
+  masternode:
+    build: ./masternode
+    networks:
+      underlay:
+        ipv4_address: 10.0.0.11
+  workernode1:
+    build: ./workernode1
+    networks:
+      underlay:
+        ipv4_address: 10.0.0.101
+      worker1:
+        ipv4_address: 10.0.1.11
+  workernode2:
+    build: ./workernode2
+    networks:
+      underlay:
+        ipv4_address: 10.0.0.202
+      worker2:
+        ipv4_address: 10.0.2.11
+  c1:
+    image: nicolaka/netshoot
+    networks:
+      worker1:
+        ipv4_address: 10.0.1.101
+  c2:
+    image: nicolaka/netshoot
+    networks:
+      worker2:
+        ipv4_address: 10.0.2.101
+networks:
+  underlay:
+    ipam:
+      driver: default
+      config:
+        - subnet: "10.0.0.0/16"
+  worker1:
+    ipam:
+      driver: default
+      config:
+        - subnet: "10.0.1.0/24"
+  worker2:
+    ipam:
+      driver: default
+      config:
+        - subnet: "10.0.2.0/24"
